@@ -53,9 +53,9 @@ def sum_view(request):
         if total.is_integer():
             total = int(total)
 
-        return JsonResponse({"sum": total})
+        return HttpResponse(total)
     except (ValueError, TypeError):
-        return JsonResponse({"error": "Invalid parameters for n1 or n2"}, status=400)
+        return HttpResponse("Invalid parameters for n1 or n2", status=400)
 
 
 # ---------------------------------------------------------------------------
