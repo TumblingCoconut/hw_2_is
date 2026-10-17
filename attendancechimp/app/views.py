@@ -35,6 +35,29 @@ def index(request):
 
 
 
+def time_view(request):
+    """Returns the current Central time formatted in HH:MM"""
+    current_time = datetime.now(CDT).strftime("%H:%M")
+    return HttpResponse(current_time, content_type="text/plain")
+
+def sum_view(request):
+    """Reads query paramters n1 and n2, converts them to float and returns a sum JSON response"""
+    try:
+        n1_str = request.GET.get('n1', 0)
+        n2_str = request.GET.get('n2', 0)
+
+        n1_int = float(n1_str)
+        n2_int = float(n2_str)
+
+        total = n1_int + n2_int
+        if total.is_integer():
+            total = int(total)
+
+        return JsonResponse({"sum": total})
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid parameters for n1 or n2"}, status=400)
+
+
 # ---------------------------------------------------------------------------
 # HW4  — user creation
 # ---------------------------------------------------------------------------
