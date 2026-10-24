@@ -1,0 +1,71 @@
+Response: Compared to the model schema that I wrote, Claude's design is far more comprehensive and detailed. I only had 
+defining the inital parameters of the database in mind, so I only wrote out the attributes I thought we'd need. But Claude 
+went further and designed the QR code functionality and implemented time checking verification. It's quite clear that the 
+LLM's model is better than in terms of content. However, I will note that there are some slight differences in how the 
+tables are linked. While we both design the model to use enrollment as a junction table that connects many to many between 
+StudentProfile and Course, Claude chose to also include a ManyToManyField in Course. I don't know if that's correct 
+but it feels redundant to me. 
+
+I think overall, Claude's version is more complete and easier to implement than mine. The output it gave is further along 
+the development process than mine and doesn't seem to have any major issues at a glance.
+
+
+
+
+LLM Model: Claude
+
+Prompt:
+""" 
+Claude
+I am working on an attendance app where class attendance is tracked via QR codes. 
+•Users: students and instructors (two roles).
+• Courses: each has one instructor. Students can enroll in multiple courses.
+• Lectures: individual class meetings, each associated with a course.
+• QR Code Uploads: photos uploaded by students, each associated with a student and a
+lecture.
+Design requirements: simple to use, supports attendance analytics, robust to cheating.
+This application is being written in Django. This step establishes the core schema for AttendanceChimp: users (students and instructors), courses,
+lectures, and QR-code uploads. Subsequent additions will query and populate these tables. Below is the template to follow:
+
+"""
+models.py — Data model for AttendanceChimp.
+AttendanceChimp is an electronic class attendance tool.  Instructors create
+courses and lectures; each lecture is assigned a random QR code.  Students
+photograph the QR code and upload the image.  The system decodes the QR code,
+matches it to a lecture, and records the attendance.
+Entities
+--------
+- CourseProfile   : extends Django User → instructor-specific data
+- StudentProfile  : extends Django User → student-specific data
+- Course          : a course taught by one instructor
+- Enrollment      : junction table linking students to courses
+- Lecture         : a single class meeting (has a QR-code identifier)
+- QRCodeUpload    : a student's uploaded QR-code photograph
+"""
+from django.db import models
+from django.contrib.auth.models import User
+import logging
+import string
+import random
+logger = logging.getLogger(__name__) # set up tracking, auditing, and debugging
+# allows using logger.warning(), logger.error(), 
+# logger.info(), etc. Better than print() for debuggin...
+# ---------------------------------------------------------------------------
+# User profiles
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Course
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Enrollment
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Lecture
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# QR Code Upload
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Helper / API functions
+# --------------------------------------------------------------------------
+"""
