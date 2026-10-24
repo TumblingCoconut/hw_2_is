@@ -79,7 +79,7 @@ class Enrollment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="enrollments")
 
     def __str__(self):
-        return f"{self.student.user.username}: {self.course.code}"
+        return f"{self.student.user.username}: {self.course.course_id}"
 
 
 # ---------------------------------------------------------------------------
@@ -106,7 +106,8 @@ class QRCodeUpload(models.Model):
     verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.student.user.username}, {self.lecture.date}"
+        lecture_info = self.lecture.date if self.lecture else "Unassigned"
+        return f"{self.student.user.username}, {lecture_info}"
 
 # ---------------------------------------------------------------------------
 # Helper / API functions
