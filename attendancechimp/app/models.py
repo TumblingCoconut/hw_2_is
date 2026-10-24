@@ -102,7 +102,7 @@ class QRCodeUpload(models.Model):
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="qr_uploads")
     lecture = models.ForeignKey(Lecture, on_delete=models.SET_NULL, null=True, blank=True, related_name="qr_uploads")
     image = models.ImageField(upload_to="qr_uploads/")
-    uploaded_at = models.DateField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
     verified = models.BooleanField(default=False)
 
     def __str__(self):
