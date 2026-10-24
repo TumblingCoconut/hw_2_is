@@ -32,40 +32,82 @@ logger = logging.getLogger(__name__) # set up tracking, auditing, and debugging
 # User profiles
 # ---------------------------------------------------------------------------
 
+class StudentProfile(models.Model):
+    '''
+    Profile representing a student
+    '''
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
+    student_id = models.CharField(max_length=8, blank=True)
+    major = models.CharField(max_length=100, blank=True)
 
+    def __str__(self):
+        return f"Student: {self.user.username}"
 
+class InstructorProfile(models.Model):
+    '''
+    Profile representing an instructor
+    '''
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='instructor_profile')
+    department = models.CharField(max_length=100, blank=True)
+    office_location = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f"Instructor: {self.user.username} at {self.office_location}"
 
 # ---------------------------------------------------------------------------
 # Course
 # ---------------------------------------------------------------------------
+class Course(models.Model):
+    '''
+    Represents an academic course taught by a single instructor
+    '''
+    course_id = models.CharField(max_length=20, unique=True, help_text="e.g., DATA13600")
+    course_name = models.CharField(max_length=200)
+    instructor = models.ForeignKey(InstructorProfile, on_delete=models.CASCADE, related_name="courses")
+    meeting_schedule = models.CharField(max_length=200, help_text="e.g. MW 1:30PM - 2:50PM")
+    description = models.TextField(blank=True)
 
+    def __str__(self):
+        return f"{self.course_id}: {self.course_name}"
 
-
-
+    
 # ---------------------------------------------------------------------------
 # Enrollment
 # ---------------------------------------------------------------------------
+class Enrollment(models.Model):
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="enrollments")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="enrollments")
 
-
+    def __str__(self):
+        return f"{self.student.user.username}: {self.course.code}"
 
 
 # ---------------------------------------------------------------------------
 # Lecture
 # ---------------------------------------------------------------------------
+class Lecture(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lectures")
+    date = models.DateField()
+    QRCode_id = models.CharField(max_length=256, unique=True)
+    active = models.BooleanField(default=False)
 
-
+    def __str__(self):
+        return f"{self.course.name}, {self.date}"
 
 
 # ---------------------------------------------------------------------------
 # QR Code Upload
 # ---------------------------------------------------------------------------
+class QRCodeUpload(models.Model):
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="qr_uploads")
+    lecture = models.ForeignKey(Lecture, on_delete=models.SET_NULL, null=True, blank=True, related_name="qr_uploads")
+    image = models.ImageField(upload_to="qr_uploads/")
+    uploaded_at = models.DateField(auto_now_add=True)
+    verified = models.BooleanField(default=False)
 
-
-
+    def __str__(self):
+        return f"{self.student.user.username}, {self.lecture.date}"
 
 # ---------------------------------------------------------------------------
 # Helper / API functions
 # ---------------------------------------------------------------------------
-
-
-
