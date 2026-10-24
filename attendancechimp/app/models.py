@@ -39,7 +39,7 @@ class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     student_id = models.CharField(max_length=8, blank=True)
     major = models.CharField(max_length=100, blank=True)
-
+    
     def __str__(self):
         return f"Student: {self.user.username}"
 

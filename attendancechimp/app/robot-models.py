@@ -337,3 +337,4 @@ def attendance_rate(student, course):
         .count()
     )
     return attended / total
+

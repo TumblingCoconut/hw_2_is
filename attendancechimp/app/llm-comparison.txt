@@ -10,9 +10,7 @@ I think overall, Claude's version is more complete and easier to implement than 
 the development process than mine and doesn't seem to have any major issues at a glance.
 
 
-
-
-LLM Model: Claude
+LLM Model: Claude, Sonnet 5.5
 
 Prompt:
 """ 
